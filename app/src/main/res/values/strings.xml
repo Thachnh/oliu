@@ -7,4 +7,7 @@
     <string name="send">Send</string>
     <string name="comment_hint">Raise your voice..</string>
     <string name="title_activity_search_suggestion">SearchSuggestionActivity</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_create_event">CreateEventActivity</string>
+    <string name="facebook_id">1618081348469294</string>
 </resources>
