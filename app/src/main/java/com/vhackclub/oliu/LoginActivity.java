@@ -27,6 +27,12 @@ public class LoginActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        if (ParseUser.getCurrentUser().getEmail() != null) {
+            startActivity(new Intent(LoginActivity.this, CreateEventActivity.class));
+            finish();
+            return;
+        }
+
         Button login = (Button) findViewById(R.id.loginfb);
 
         login.setOnClickListener(new View.OnClickListener() {
@@ -41,13 +47,15 @@ public class LoginActivity extends ActionBarActivity {
                 public void done(ParseUser user, ParseException err) {
                     progressDialog.dismiss();
                     if (user == null) {
-                        Log.d("LoginActivity", "Uh oh. The user cancelled the Facebook login.");
+                        Log.d("LoginActivity", "Uh oh. The user cancelled the Facebook login. " + Log.getStackTraceString(err));
                     } else if (user.isNew()) {
                         Log.d("LoginActivity", "User signed up and logged in through Facebook!");
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        startActivity(new Intent(LoginActivity.this, CreateEventActivity.class));
+                        finish();
                     } else {
                         Log.d("LoginActivity", "User logged in through Facebook!");
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        startActivity(new Intent(LoginActivity.this, CreateEventActivity.class));
+                        finish();
                     }
                 }
             });
