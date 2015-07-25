@@ -7,6 +7,14 @@ import com.parse.ParseQuery;
 @ParseClassName("Suggestion")
 public class Suggestion extends ParseObject {
 
+    public String getName() {
+        return getString("name");
+    }
+
+    public void setName(String name) {
+        put("name", name);
+    }
+
     public String getUuidString() {
         return getString("uuid");
     }

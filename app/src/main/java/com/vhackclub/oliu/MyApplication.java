@@ -5,6 +5,8 @@ import android.app.Application;
 import com.facebook.FacebookSdk;
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseObject;
+import com.vhackclub.oliu.base.Comment;
 
 /**
  * Created by thachnh on 7/25/15.

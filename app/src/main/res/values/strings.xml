@@ -4,4 +4,6 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="send">Send</string>
+    <string name="comment_hint">Raise your voice..</string>
 </resources>

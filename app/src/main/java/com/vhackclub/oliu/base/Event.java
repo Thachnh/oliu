@@ -13,6 +13,10 @@ public class Event extends ParseObject {
         EAT;
     }
 
+    public void setType(TYPE type) {
+        put("type", type.name());
+    }
+
     public TYPE getType() {
         return TYPE.valueOf(getString("type"));
     }

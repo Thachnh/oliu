@@ -7,6 +7,14 @@ import com.parse.ParseQuery;
 @ParseClassName("Comment")
 public class Comment extends ParseObject {
 
+    public String getText() {
+        return getString("text");
+    }
+
+    public void setText(String text) {
+        put("text", text);
+    }
+
     public String getUuidString() {
         return getString("uuid");
     }
