@@ -16,6 +16,7 @@ public class MyApplication  extends Application {
 
         FacebookSdk.sdkInitialize(getApplicationContext());
 
+        Parse.enableLocalDatastore(this);
         Parse.initialize(this,
                 "6YcCS8AtuxwZYPbsKjeaOdCip4IR4dvd0RcArorN",
                 "9dDakcH3uqJtl6Z4BLrEy7H51ld06t7scLo9agfH"
