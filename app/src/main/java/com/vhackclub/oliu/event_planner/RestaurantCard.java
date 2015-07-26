@@ -87,4 +87,8 @@ public class RestaurantCard extends CardView {
         mReview.setText(rest.getStatus());
         mTier.setText(rest.getTier());
     }
+
+    public Restaurant getRestaurant() {
+        return mRestaurant;
+    }
 }

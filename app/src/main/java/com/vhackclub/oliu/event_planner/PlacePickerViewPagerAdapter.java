@@ -56,7 +56,15 @@ public class PlacePickerViewPagerAdapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
-        return view == object;
+        ViewKey viewKey = (ViewKey) object;
+        if (viewKey.objectId == null) {
+            return !(view instanceof RestaurantCard);
+        };
+        if (view instanceof RestaurantCard) {
+            return ((RestaurantCard) view).getRestaurant().getObjectId() == viewKey.objectId;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -74,7 +82,7 @@ public class PlacePickerViewPagerAdapter extends PagerAdapter {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            return view;
+            return new ViewKey(suggestion.getLocation().getObjectId());
         }
         Log.d("instantiate item", "add add button " + position);
         View view = mLayoutInflater.inflate(R.layout.add_option_page, container, false);
@@ -85,11 +93,21 @@ public class PlacePickerViewPagerAdapter extends PagerAdapter {
                 ((Activity) mContext).startActivityForResult(new Intent(mContext, SearchSuggestionActivity.class), Util.PICK_LOCATION);
             }
         });
-        return view;
+        return new ViewKey();
     }
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);
+    }
+
+    public static class ViewKey {
+        public final String objectId;
+        public ViewKey() {
+            this.objectId = null;
+        }
+        public ViewKey(String objectId) {
+            this.objectId = objectId;
+        }
     }
 }
