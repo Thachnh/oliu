@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,9 +15,12 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.vhackclub.oliu.base.BaseEvent;
+import com.vhackclub.oliu.base.BaseLocation;
 import com.vhackclub.oliu.base.Comment;
 import com.vhackclub.oliu.event_planner.EventPlannerRecyclerAdapter;
+import com.vhackclub.oliu.models.LocationSuggestion;
 import com.vhackclub.oliu.models.Restaurant;
 import com.vhackclub.oliu.util.Util;
 
@@ -53,11 +57,16 @@ public class EventPlannerActivity extends FragmentActivity {
         mCommentCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Comment comment = new Comment();
+                final Comment comment = new Comment();
                 comment.setText(mCommentEdt.getText().toString());
                 comment.setUser(ParseUser.getCurrentUser());
-                mEvent.put("comments", comment);
-                mEvent.saveInBackground();
+                comment.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        mEvent.addComment(comment);
+                        mEvent.saveInBackground();
+                    }
+                });
                 mAdapter.addComment(comment);
                 mCommentEdt.setText("");
             }
@@ -72,8 +81,13 @@ public class EventPlannerActivity extends FragmentActivity {
             @Override
             public void done(BaseEvent baseEvent, ParseException e) {
                 if (e == null) {
-                    mEvent = baseEvent;
-                    mAdapter.updateEvent(baseEvent);
+                    try {
+                        baseEvent.fetchIfNeeded();
+                        mEvent = baseEvent;
+                        mAdapter.updateEvent(baseEvent);
+                    } catch (ParseException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
         });
@@ -84,7 +98,38 @@ public class EventPlannerActivity extends FragmentActivity {
         if (requestCode == Util.PICK_LOCATION) {
             if (resultCode == RESULT_OK) {
                 String locationId = data.getStringExtra("restaurandId");
+                Log.d("activity Result", "id " + locationId);
+                handleNewLocation(locationId);
             }
         }
+    }
+
+    private void handleNewLocation(String locationId) {
+        ParseQuery<Restaurant> query = ParseQuery.getQuery(Restaurant.class);
+
+        query.getInBackground(locationId, new GetCallback<Restaurant>() {
+            @Override
+            public void done(Restaurant restaurant, ParseException e) {
+                if (e == null) {
+                    Log.d("handle new", "find location " + restaurant.getObjectId() + " " + restaurant.getName());
+                    addLocationSuggestion(restaurant);
+                }
+            }
+        });
+    }
+
+    private void addLocationSuggestion(BaseLocation location) {
+        final LocationSuggestion suggestion = new LocationSuggestion();
+        suggestion.setLocation(location);
+        suggestion.setEvent(mEvent);
+        suggestion.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                Log.d("add location", "new suggestion id " + suggestion.getObjectId());
+                mEvent.addLocationSuggestion(suggestion);
+                mEvent.saveInBackground();
+                mAdapter.addLocationSuggestion(suggestion);
+            }
+        });
     }
 }

@@ -4,16 +4,17 @@ import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.parse.ParseException;
 import com.vhackclub.oliu.R;
 import com.vhackclub.oliu.base.BaseEvent;
 import com.vhackclub.oliu.base.Comment;
 import com.vhackclub.oliu.models.LocationSuggestion;
-import com.vhackclub.oliu.models.Restaurant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,8 +78,7 @@ public class EventPlannerRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     public int getItemViewType(int position) {
         if (position < 1) {
             return VIEW_TYPES.TITLE.ordinal();
-        }
-        else if (position < 1 + getOffsetPickerCount()) {
+        } else if (position < 1 + getOffsetPickerCount()) {
             return VIEW_TYPES.PLACE_PICKER.ordinal();
         }
         return VIEW_TYPES.COMMENT.ordinal();
@@ -111,11 +111,23 @@ public class EventPlannerRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         mAdapter.updateSuggestions(suggestions);
     }
 
+    public void addLocationSuggestion(LocationSuggestion suggestion) {
+        mAdapter.addSuggestion(suggestion);
+    }
+
     public void updateEvent(BaseEvent event) {
         mEvent = event;
         mComments = event.getComments();
         if (mComments == null) {
             mComments = new ArrayList<>();
+        }
+        Log.d("test", "comments " + mComments.size());
+        try {
+            for (Comment comment : mComments) {
+                comment.fetchIfNeeded();
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
         updateLocationSuggestions(event.getLocationSuggestions());
         notifyDataSetChanged();

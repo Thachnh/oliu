@@ -4,17 +4,19 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
-import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.parse.ParseException;
 import com.vhackclub.oliu.R;
 import com.vhackclub.oliu.SearchSuggestionActivity;
 import com.vhackclub.oliu.models.LocationSuggestion;
 import com.vhackclub.oliu.models.Restaurant;
 import com.vhackclub.oliu.util.Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,7 +24,7 @@ import java.util.List;
  */
 public class PlacePickerViewPagerAdapter extends PagerAdapter {
 
-    private List<LocationSuggestion> mSuggestion;
+    private List<LocationSuggestion> mSuggestions = new ArrayList<LocationSuggestion>();
     private Context mContext;
     private LayoutInflater mLayoutInflater;
 
@@ -33,14 +35,23 @@ public class PlacePickerViewPagerAdapter extends PagerAdapter {
         mLayoutInflater = layoutInflater;
     }
 
-    public void updateSuggestions(List<LocationSuggestion> suggestion) {
-        mSuggestion = suggestion;
+    public void updateSuggestions(List<LocationSuggestion> suggestions) {
+        if (suggestions == null) {
+            mSuggestions = new ArrayList<LocationSuggestion>();
+        } else {
+            mSuggestions = suggestions;
+        }
+        notifyDataSetChanged();
+    }
+
+    public void addSuggestion(LocationSuggestion suggestion) {
+        mSuggestions.add(suggestion);
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return mSuggestion == null ? 1 : mSuggestion.size() + 1 /* Adding option */;
+        return mSuggestions == null ? 1 : mSuggestions.size() + 1 /* Adding option */;
     }
 
     @Override
@@ -50,13 +61,22 @@ public class PlacePickerViewPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        if (mSuggestion != null && position < mSuggestion.size()) {
+        if (mSuggestions != null && position < mSuggestions.size()) {
             RestaurantCard view = (RestaurantCard) mLayoutInflater.inflate(R.layout.restaurant_page, container, false);
             container.addView(view);
-            LocationSuggestion suggestion = (LocationSuggestion) mSuggestion.get(position);
-            view.setRestaurant((Restaurant) suggestion.getLocation());
+            LocationSuggestion suggestion = (LocationSuggestion) mSuggestions.get(position);
+            try {
+                suggestion.fetchIfNeeded();
+                Log.d("instantiate item", "position " + position + " item " + suggestion.getObjectId());
+                Restaurant restaurant = (Restaurant) suggestion.getLocation();
+                restaurant.fetchIfNeeded();
+                view.setRestaurant(restaurant);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             return view;
         }
+        Log.d("instantiate item", "add add button " + position);
         View view = mLayoutInflater.inflate(R.layout.add_option_page, container, false);
         container.addView(view);
         view.setOnClickListener(new View.OnClickListener() {
