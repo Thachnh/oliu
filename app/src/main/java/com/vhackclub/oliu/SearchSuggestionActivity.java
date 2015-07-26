@@ -39,7 +39,6 @@ public class SearchSuggestionActivity extends ActionBarActivity {
     RecyclerView rvSuggestion;
     SuggestionRecyclerViewAdapter adapter;
     FoursquareAPI api;
-//    Restaurant lRestaurant;
 
     public static final String baseUrl = "https://api.foursquare.com/v2";
     private final String TAG = "4square";
@@ -129,15 +128,22 @@ public class SearchSuggestionActivity extends ActionBarActivity {
                 suggestionJson = array.getJSONObject(i);
                 final String id = suggestionJson.getString("id");
                 String name = suggestionJson.getString("name");
+                // get phone number
                 String phone = null;
                 if (suggestionJson.getJSONObject("contact").length() != 0) {
                     phone = suggestionJson.getJSONObject("contact").getString("formattedPhone");
+                }
+                // get address
+                String address = null;
+                JSONObject location = JSONUtil.getJsonObject("location", suggestionJson);
+                if (location != null) {
+                    address = JSONUtil.getString("address", location);
                 }
                 final Restaurant lRestaurant = new Restaurant();
                 lRestaurant.setId(id);
                 lRestaurant.setName(name);
                 lRestaurant.setPhone(phone);
-
+                lRestaurant.setAddress(address);
                 api.get4SquareSpecificVenueData(id,
                         FoursquareAPIData.CLIENT_ID,
                         FoursquareAPIData.CLIENT_SECRET,
@@ -186,10 +192,31 @@ public class SearchSuggestionActivity extends ActionBarActivity {
                 }
             }
 
+            // get photo url
+            String photoUrl = null;
+            JSONObject photos = JSONUtil.getJsonObject("photos", venue);
+            if (photos != null) {
+                JSONArray groups = JSONUtil.getJsonArray("groups", photos);
+                if (groups != null && groups.length() > 0) {
+                    JSONArray items = JSONUtil.getJsonArray("items", groups.getJSONObject(0));
+                    if (items != null && items.length() >= 1) {
+                        JSONObject item = items.getJSONObject(0);
+                        if (item != null) {
+                            String prefix = JSONUtil.getString("prefix", item);
+                            String suffix = JSONUtil.getString("suffix", item);
+                            if (prefix != null && suffix != null) {
+                                photoUrl = prefix + "original" + suffix;
+                            }
+                        }
+                    }
+                }
+            }
+
             lRestaurant.setCanonicalUrl(canonicalUrl);
             lRestaurant.setTier(tier);
             lRestaurant.setRating(rating);
             lRestaurant.setStatus(status);
+            lRestaurant.setVenueUrl(photoUrl);
             adapter.addItem(lRestaurant);
             adapter.notifyDataSetChanged();
         } catch (JSONException e) {

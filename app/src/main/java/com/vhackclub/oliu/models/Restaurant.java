@@ -13,6 +13,11 @@ public class Restaurant {
     private String tier;
     private String rating;
     private String status;
+    private String venueUrl;
+
+    public String getVenueUrl() { return venueUrl; }
+
+    public void setVenueUrl(String venueUrl) { this.venueUrl = venueUrl; }
 
     public String getId() {
         return id;

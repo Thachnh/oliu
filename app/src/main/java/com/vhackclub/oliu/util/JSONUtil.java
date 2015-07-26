@@ -1,5 +1,6 @@
 package com.vhackclub.oliu.util;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,4 +27,15 @@ public class JSONUtil {
         }
         return null;
     }
+
+    public static JSONArray getJsonArray(String keyWord, JSONObject obj) {
+        try {
+            JSONArray arrObj = obj.getJSONArray(keyWord);
+            return arrObj;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

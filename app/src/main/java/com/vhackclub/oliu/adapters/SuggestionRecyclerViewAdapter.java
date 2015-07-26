@@ -5,10 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.vhackclub.oliu.R;
 import com.vhackclub.oliu.models.Restaurant;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -34,7 +36,16 @@ public class SuggestionRecyclerViewAdapter extends RecyclerView.Adapter<Suggesti
     public void onBindViewHolder(ViewHolder holder, int position) {
         Restaurant suggestion = suggestions.get(position);
         holder.tvName.setText(suggestion.getName());
-        holder.tvPhone.setText(suggestion.getRating());
+        holder.tvAddress.setText(suggestion.getAddress());
+        holder.tvRating.setText(suggestion.getRating());
+        holder.tvStatus.setText(suggestion.getStatus());
+        Context context = holder.ivVenue.getContext();
+        if (suggestion.getVenueUrl() != null && suggestion.getVenueUrl().length() != 0) {
+            Picasso.with(context)
+                    .load(suggestion.getVenueUrl())
+                    .resize(200,200)
+                    .into(holder.ivVenue);
+        }
     }
 
     @Override
@@ -48,13 +59,20 @@ public class SuggestionRecyclerViewAdapter extends RecyclerView.Adapter<Suggesti
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         public TextView tvName;
-        public TextView tvPhone;
+        public TextView tvAddress;
+        public TextView tvRating;
+        public TextView tvStatus;
+        public ImageView ivVenue;
+
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
         public ViewHolder(View itemView) {
             super(itemView);
-            this.tvName = (TextView) itemView.findViewById(R.id.tvName);
-            this.tvPhone = (TextView) itemView.findViewById(R.id.tvPhone);
+            this.tvName    = (TextView) itemView.findViewById(R.id.tvName);
+            this.tvAddress = (TextView) itemView.findViewById(R.id.tvAddress);
+            this.tvRating  = (TextView) itemView.findViewById(R.id.tvRating);
+            this.tvStatus  = (TextView) itemView.findViewById(R.id.tvStatus);
+            this.ivVenue   = (ImageView) itemView.findViewById(R.id.ivVenue);
         }
     }
 
