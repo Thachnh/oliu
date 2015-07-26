@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.vhackclub.oliu.adapters.SuggestionRecyclerViewAdapter;
 import com.vhackclub.oliu.models.Restaurant;
+import com.vhackclub.oliu.util.JSONUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,8 +38,9 @@ public class SearchSuggestionActivity extends ActionBarActivity {
     Button btnSearch;
     RecyclerView rvSuggestion;
     SuggestionRecyclerViewAdapter adapter;
-
     FoursquareAPI api;
+//    Restaurant lRestaurant;
+
     public static final String baseUrl = "https://api.foursquare.com/v2";
     private final String TAG = "4square";
 
@@ -85,28 +87,10 @@ public class SearchSuggestionActivity extends ActionBarActivity {
 
                                 @Override
                                 public void failure(RetrofitError error) {
-
+                                    Log.e(TAG, error.toString());
                                 }
                             }
                     );
-
-
-//                    api.get4SquareSpecificVenueData("40a55d80f964a52020f31ee3",
-//                            FoursquareAPIData.CLIENT_ID,
-//                            FoursquareAPIData.CLIENT_SECRET,
-//                            new Callback<Response>() {
-//                                @Override
-//                                public void success(Response response, Response response2) {
-//                                    String str = new String(((TypedByteArray) response.getBody()).getBytes());
-//                                    System.out.print(str);
-//                                }
-//
-//                                @Override
-//                                public void failure(RetrofitError error) {
-//
-//                                }
-//                            });
-
                 };
             }
         });
@@ -143,21 +127,72 @@ public class SearchSuggestionActivity extends ActionBarActivity {
             for (int i=0; i<array.length(); i++) {
                 JSONObject suggestionJson = null;
                 suggestionJson = array.getJSONObject(i);
-                String id = suggestionJson.getString("id");
+                final String id = suggestionJson.getString("id");
                 String name = suggestionJson.getString("name");
                 String phone = null;
                 if (suggestionJson.getJSONObject("contact").length() != 0) {
                     phone = suggestionJson.getJSONObject("contact").getString("formattedPhone");
                 }
-                Restaurant restaurant = new Restaurant();
-                restaurant.setId(id);
-                restaurant.setName(name);
-                restaurant.setPhone(phone);
-                adapter.addItem(restaurant);
-                adapter.notifyDataSetChanged();
+                final Restaurant lRestaurant = new Restaurant();
+                lRestaurant.setId(id);
+                lRestaurant.setName(name);
+                lRestaurant.setPhone(phone);
+
+                api.get4SquareSpecificVenueData(id,
+                        FoursquareAPIData.CLIENT_ID,
+                        FoursquareAPIData.CLIENT_SECRET,
+                        new Callback<Response>() {
+                            @Override
+                            public void success(Response response, Response response2) {
+                                String sid = id;
+                                String str = new String(((TypedByteArray) response.getBody()).getBytes());
+                                try {
+                                    JSONObject obj = new JSONObject(str);
+                                    parseSpecificVenue(obj, lRestaurant);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+                                Log.e(TAG, error.toString());
+                            }
+                        });
             }
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void parseSpecificVenue(JSONObject obj, Restaurant lRestaurant) {
+        try {
+            JSONObject venue = obj.getJSONObject("response").getJSONObject("venue");
+            String canonicalUrl = venue.getString("canonicalUrl");
+            String tier = null;
+            JSONObject price = JSONUtil.getJsonObject("price", venue);
+            if (price != null) {
+                if (price.length() != 0) {
+                    tier = price.getString("message");
+                }
+            }
+            String rating = JSONUtil.getString("rating", venue);
+            String status = null;
+            JSONObject hour = JSONUtil.getJsonObject("hours", venue);
+            if (hour != null) {
+                if (hour.length() != 0) {
+                    status = JSONUtil.getString("status", hour);
+                }
+            }
+
+            lRestaurant.setCanonicalUrl(canonicalUrl);
+            lRestaurant.setTier(tier);
+            lRestaurant.setRating(rating);
+            lRestaurant.setStatus(status);
+            adapter.addItem(lRestaurant);
+            adapter.notifyDataSetChanged();
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }

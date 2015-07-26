@@ -34,7 +34,7 @@ public class SuggestionRecyclerViewAdapter extends RecyclerView.Adapter<Suggesti
     public void onBindViewHolder(ViewHolder holder, int position) {
         Restaurant suggestion = suggestions.get(position);
         holder.tvName.setText(suggestion.getName());
-        holder.tvPhone.setText(suggestion.getPhone());
+        holder.tvPhone.setText(suggestion.getRating());
     }
 
     @Override
