@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.vhackclub.oliu.R;
 import com.vhackclub.oliu.base.BaseEvent;
 import com.vhackclub.oliu.base.Comment;
-import com.vhackclub.oliu.models.Option;
 import com.vhackclub.oliu.models.Restaurant;
 
 import java.util.List;
@@ -61,7 +60,7 @@ public class EventPlannerRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (VIEW_TYPES.values()[getItemViewType(position)]) {
             case TITLE:
-                ((TextView) holder.itemView).setText(mEvent.getType().name());
+                ((TextView) holder.itemView).setText(mEvent.getGreeting());
             case PLACE_PICKER:
                 return;
             case COMMENT:
@@ -85,6 +84,9 @@ public class EventPlannerRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public int getItemCount() {
+        if (mEvent == null) {
+            return 0;
+        }
         return 1 /* title */ + getOffsetPickerCount() + (mComments == null ? 0 : mComments.size());
     }
 
@@ -105,6 +107,13 @@ public class EventPlannerRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public void updateRestaurant(List<Restaurant> suggestions) {
         mAdapter.updateSuggestions(suggestions);
+    }
+
+    public void updateEvent(BaseEvent event) {
+        mEvent = event;
+        mComments = event.getComments();
+        // TODO update list suggestions
+        notifyDataSetChanged();
     }
 
     private class ViewPagerHolder extends RecyclerView.ViewHolder {

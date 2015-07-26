@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.vhackclub.oliu.R;
 import com.vhackclub.oliu.SearchSuggestionActivity;
-import com.vhackclub.oliu.base.Suggestion;
 import com.vhackclub.oliu.models.Restaurant;
 
 import java.util.List;

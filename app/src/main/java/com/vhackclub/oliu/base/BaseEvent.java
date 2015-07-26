@@ -64,7 +64,7 @@ public class BaseEvent extends ParseObject {
         put("comments", comments);
     }
 
-    public List<Comment> getComments(Comment comment) {
+    public List<Comment> getComments() {
         return getList("comments");
     }
 

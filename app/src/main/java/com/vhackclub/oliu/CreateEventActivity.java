@@ -138,7 +138,7 @@ public class CreateEventActivity extends ActionBarActivity {
         event.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                prepareShareDialog();
+                prepareShareDialog(event);
                 if (e == null) {
                     shareOnFacebook(event);
                 } else {
@@ -148,7 +148,7 @@ public class CreateEventActivity extends ActionBarActivity {
         });
     }
 
-    public void prepareShareDialog() {
+    public void prepareShareDialog(final BaseEvent event) {
         callbackManager = CallbackManager.Factory.create();
         messageDialog = new MessageDialog(CreateEventActivity.this);
         messageDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
@@ -157,7 +157,11 @@ public class CreateEventActivity extends ActionBarActivity {
                 Log.d("onSuccess", "result " + result.getClass());
                 // TODO fix the case where user presses back from share
                 progressDialog.dismiss();
-                startActivity(new Intent(CreateEventActivity.this, EventPlannerActivity.class));
+                Intent intent = new Intent(CreateEventActivity.this, EventPlannerActivity.class);
+                Bundle b = new Bundle();
+                b.putString("event_id", event.getObjectId());
+                intent.putExtras(b);
+                startActivity(intent);
                 finish();
             }
 
