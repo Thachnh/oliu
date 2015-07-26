@@ -1,11 +1,12 @@
 package com.vhackclub.oliu.models;
 
 import com.vhackclub.oliu.base.BaseLocation;
+import java.io.Serializable;
 
 /**
  * Created by duncapham on 7/25/15.
  */
-public class Restaurant extends BaseLocation {
+public class Restaurant extends BaseLocation implements Serializable{
     private String id;
     private String name;
     private String phone;

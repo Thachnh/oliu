@@ -11,4 +11,5 @@
     <string name="title_activity_create_event">CreateEventActivity</string>
     <string name="facebook_id">1618081348469294</string>
     <string name="title_activity_select_friends">SelectFriendsActivity</string>
+    <string name="title_activity_search_suggestion_detail">SearchSuggestionDetailActivity</string>
 </resources>

@@ -1,6 +1,9 @@
 package com.vhackclub.oliu.adapters;
 
+import android.support.v4.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.vhackclub.oliu.R;
+import com.vhackclub.oliu.SuggestionDetailDialog;
 import com.vhackclub.oliu.models.Restaurant;
 import com.squareup.picasso.Picasso;
 
@@ -18,8 +22,8 @@ import java.util.ArrayList;
  * Created by duncapham on 7/25/15.
  */
 public class SuggestionRecyclerViewAdapter extends RecyclerView.Adapter<SuggestionRecyclerViewAdapter.ViewHolder> {
-    private ArrayList<Restaurant> suggestions;
-    private Context context;
+    private static ArrayList<Restaurant> suggestions;
+    private static Context context;
 
     public SuggestionRecyclerViewAdapter(Context context, ArrayList<Restaurant> suggestions) {
         this.context = context;
@@ -55,7 +59,7 @@ public class SuggestionRecyclerViewAdapter extends RecyclerView.Adapter<Suggesti
 
     // Provide a direct reference to each of the views within a data item
     // Used to cache the views within the item layout for fast access
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         public TextView tvName;
@@ -73,6 +77,17 @@ public class SuggestionRecyclerViewAdapter extends RecyclerView.Adapter<Suggesti
             this.tvRating  = (TextView) itemView.findViewById(R.id.tvRating);
             this.tvStatus  = (TextView) itemView.findViewById(R.id.tvStatus);
             this.ivVenue   = (ImageView) itemView.findViewById(R.id.ivVenue);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int pos = getLayoutPosition();
+            Restaurant restaurant = suggestions.get(pos);
+
+            FragmentManager fm = ((ActionBarActivity)context).getSupportFragmentManager();
+            SuggestionDetailDialog dialog = SuggestionDetailDialog.newInstance(restaurant);
+            dialog.show(fm, "fragment_alert");
         }
     }
 
