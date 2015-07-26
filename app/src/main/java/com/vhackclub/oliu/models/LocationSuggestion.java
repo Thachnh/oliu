@@ -12,7 +12,7 @@ public class LocationSuggestion extends BaseSuggestion {
     public void setLocation(BaseLocation location) {
         put("location", location);
     }
-    public void getLocation() {
-
+    public BaseLocation getLocation() {
+        return (BaseLocation) get("location");
     }
 }

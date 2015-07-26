@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.vhackclub.oliu.R;
 import com.vhackclub.oliu.base.BaseEvent;
 import com.vhackclub.oliu.base.Comment;
+import com.vhackclub.oliu.models.LocationSuggestion;
 import com.vhackclub.oliu.models.Restaurant;
 
 import java.util.List;
@@ -105,14 +106,14 @@ public class EventPlannerRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         notifyItemInserted(mComments.size() - 1);
     }
 
-    public void updateRestaurant(List<Restaurant> suggestions) {
+    public void updateLocationSuggestions(List<LocationSuggestion> suggestions) {
         mAdapter.updateSuggestions(suggestions);
     }
 
     public void updateEvent(BaseEvent event) {
         mEvent = event;
         mComments = event.getComments();
-        // TODO update list suggestions
+        updateLocationSuggestions(event.getLocationSuggestions());
         notifyDataSetChanged();
     }
 

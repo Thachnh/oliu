@@ -35,18 +35,6 @@ public class EventPlannerActivity extends FragmentActivity {
         ParseObject.registerSubclass(BaseEvent.class);
         mAdapter = new EventPlannerRecyclerAdapter(null, this, getLayoutInflater());
 
-        Comment m1 = new Comment();
-        m1.setText("Fuck 1");
-        Comment m2 = new Comment();
-        m2.setText("Fuck 2");
-        Comment m3 = new Comment();
-        m3.setText("Fuck 3");
-        Comment m4 = new Comment();
-        m4.setText("Fuck 4");
-        Comment m5 = new Comment();
-        m5.setText("Fuck 5");
-        mAdapter.updateComments(Arrays.asList(m1, m2, m3, m4, m5));
-        mAdapter.updateRestaurant(Arrays.asList(Restaurant.createInstance(), Restaurant.createInstance()));
         view.setLayoutManager(new LinearLayoutManager(this));
         view.setAdapter(mAdapter);
     }

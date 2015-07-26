@@ -6,11 +6,10 @@ import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.vhackclub.oliu.R;
 import com.vhackclub.oliu.SearchSuggestionActivity;
+import com.vhackclub.oliu.models.LocationSuggestion;
 import com.vhackclub.oliu.models.Restaurant;
 
 import java.util.List;
@@ -20,7 +19,7 @@ import java.util.List;
  */
 public class PlacePickerViewPagerAdapter extends PagerAdapter {
 
-    private List<Restaurant> mSuggestion;
+    private List<LocationSuggestion> mSuggestion;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
 
@@ -31,14 +30,14 @@ public class PlacePickerViewPagerAdapter extends PagerAdapter {
         mLayoutInflater = layoutInflater;
     }
 
-    public void updateSuggestions(List<Restaurant> suggestion) {
+    public void updateSuggestions(List<LocationSuggestion> suggestion) {
         mSuggestion = suggestion;
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return mSuggestion == null ? 0 : mSuggestion.size() + 1 /* Adding option */;
+        return mSuggestion == null ? 1 : mSuggestion.size() + 1 /* Adding option */;
     }
 
     @Override
@@ -48,10 +47,11 @@ public class PlacePickerViewPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        if (position < mSuggestion.size()) {
+        if (mSuggestion != null && position < mSuggestion.size()) {
             RestaurantCard view = (RestaurantCard) mLayoutInflater.inflate(R.layout.restaurant_page, container, false);
             container.addView(view);
-            view.setRestaurant((Restaurant) mSuggestion.get(position));
+            LocationSuggestion suggestion = (LocationSuggestion) mSuggestion.get(position);
+            view.setRestaurant((Restaurant) suggestion.getLocation());
             return view;
         }
         View view = mLayoutInflater.inflate(R.layout.add_option_page, container, false);
