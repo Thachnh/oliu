@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.parse.ParseException;
 import com.vhackclub.oliu.R;
@@ -72,7 +73,9 @@ public class PlacePickerViewPagerAdapter extends PagerAdapter {
         if (mSuggestions != null && position < mSuggestions.size()) {
             RestaurantCard view = (RestaurantCard) mLayoutInflater.inflate(R.layout.restaurant_page, container, false);
             container.addView(view);
-            LocationSuggestion suggestion = (LocationSuggestion) mSuggestions.get(position);
+            final LocationSuggestion suggestion = (LocationSuggestion) mSuggestions.get(position);
+
+            // create restaurant card view
             try {
                 suggestion.fetchIfNeeded();
                 Log.d("instantiate item", "position " + position + " item " + suggestion.getObjectId());
@@ -82,6 +85,12 @@ public class PlacePickerViewPagerAdapter extends PagerAdapter {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+
+            // create & attach vote view
+            VoteRow voteView = (VoteRow) mLayoutInflater.inflate(R.layout.vote_row, view, false);
+            voteView.reset();
+            voteView.bindSuggestion(mSuggestions.get(position));
+            view.addView(voteView);
             return new ViewKey(suggestion.getLocation().getObjectId());
         }
         Log.d("instantiate item", "add add button " + position);
