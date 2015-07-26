@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.vhackclub.oliu.R;
+import com.vhackclub.oliu.base.BaseEvent;
 import com.vhackclub.oliu.base.Comment;
-import com.vhackclub.oliu.base.Event;
-import com.vhackclub.oliu.base.Suggestion;
+import com.vhackclub.oliu.models.Option;
 import com.vhackclub.oliu.models.Restaurant;
 
 import java.util.List;
@@ -32,10 +32,10 @@ public class EventPlannerRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     private final Context mContext;
     private final LayoutInflater mLayoutInflater;
     private List<Comment> mComments;
-    private Event mEvent;
+    private BaseEvent mEvent;
     private PlacePickerViewPagerAdapter mAdapter;
 
-    public EventPlannerRecyclerAdapter(Event event, Context context, LayoutInflater layoutInflater) {
+    public EventPlannerRecyclerAdapter(BaseEvent event, Context context, LayoutInflater layoutInflater) {
         this.mEvent = event;
         this.mContext = context;
         this.mLayoutInflater = layoutInflater;

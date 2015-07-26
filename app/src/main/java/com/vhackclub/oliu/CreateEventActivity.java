@@ -27,7 +27,7 @@ import com.facebook.share.widget.MessageDialog;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-import com.vhackclub.oliu.base.Event;
+import com.vhackclub.oliu.base.BaseEvent;
 
 import java.util.Calendar;
 
@@ -112,7 +112,7 @@ public class CreateEventActivity extends ActionBarActivity {
     }
 
     public void createEvent() {
-        final Event event = new Event();
+        final BaseEvent event = new BaseEvent();
         RadioGroup radioButtonGroup = (RadioGroup) findViewById(R.id.whatGroup);
         int radioButtonID = radioButtonGroup.getCheckedRadioButtonId();
         RadioButton radioButton = (RadioButton) radioButtonGroup.findViewById(radioButtonID);
@@ -120,7 +120,7 @@ public class CreateEventActivity extends ActionBarActivity {
             fallback("What is not selected!");
             return;
         }
-        event.setType(Event.TYPE.valueOf(radioButton.getText().toString().toUpperCase()));
+        event.setType(com.vhackclub.oliu.base.BaseEvent.TYPE.valueOf(radioButton.getText().toString().toUpperCase()));
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);
@@ -173,7 +173,7 @@ public class CreateEventActivity extends ActionBarActivity {
         });
     }
 
-    public void shareOnFacebook(Event event) {
+    public void shareOnFacebook(BaseEvent event) {
         if (MessageDialog.canShow(ShareLinkContent.class)) {
             ShareLinkContent linkContent = new ShareLinkContent.Builder()
                     .setContentTitle("Yo yo Oliu")

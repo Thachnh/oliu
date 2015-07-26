@@ -6,16 +6,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.parse.ParseObject;
+import com.vhackclub.oliu.base.BaseEvent;
 import com.vhackclub.oliu.base.Comment;
-import com.vhackclub.oliu.base.Event;
-import com.vhackclub.oliu.base.Suggestion;
 import com.vhackclub.oliu.event_planner.EventPlannerRecyclerAdapter;
 import com.vhackclub.oliu.models.Restaurant;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class EventPlannerActivity extends FragmentActivity {
 
@@ -24,9 +20,9 @@ public class EventPlannerActivity extends FragmentActivity {
         super.onCreate(savedInstaceState);
         setContentView(R.layout.event_planner);
         RecyclerView view = (RecyclerView) findViewById(R.id.recycler_view);
-        ParseObject.registerSubclass(Event.class);
-        Event e = new Event();
-        e.setType(Event.TYPE.EAT);
+        ParseObject.registerSubclass(BaseEvent.class);
+        BaseEvent e = new BaseEvent();
+        e.setType(com.vhackclub.oliu.base.BaseEvent.TYPE.EAT);
         EventPlannerRecyclerAdapter adapter = new EventPlannerRecyclerAdapter(e, this, getLayoutInflater());
 
         Comment m1 = new Comment();
