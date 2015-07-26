@@ -1,20 +1,19 @@
 package com.vhackclub.oliu.base;
 
-import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.vhackclub.oliu.models.LocationSuggestion;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-@ParseClassName("Event")
-public class Event extends ParseObject {
+@ParseClassName("BaseEvent")
+public class BaseEvent extends ParseObject {
 
     public static enum TYPE {
-        EAT, FUCK, WATCH;
+        EAT
     }
 
     public void setType(TYPE type) {
@@ -41,16 +40,24 @@ public class Event extends ParseObject {
 
     public List<ParseUser> getMembers() {return getList("members"); }
 
-    public List<Suggestion> getLocationSuggestions() {
-        return getList("suggestions");
+    public void setWhere(BaseLocation location) {
+        put("location", location);
     }
 
-    public void setLocationSuggestions(List<Suggestion> suggestions) {
-        put("suggestions", suggestions);
+    public Object getWhere() {
+        return get("location");
     }
 
-    public void addLocationSuggestion(Suggestion suggestion) {
-        add("suggestions", suggestion);
+    public List<LocationSuggestion> getLocationSuggestions() {
+        return getList("locationSuggestions");
+    }
+
+    public void setLocationSuggestions(List<LocationSuggestion> suggestions) {
+        put("locationSuggestions", suggestions);
+    }
+
+    public void addLocationSuggestion(LocationSuggestion suggestion) {
+        add("locationSuggestions", suggestion);
     }
 
     public void setComments(List<Comment> comments) {
@@ -61,8 +68,8 @@ public class Event extends ParseObject {
         return getList("comments");
     }
 
-    public static ParseQuery<Event> getQuery() {
-        return ParseQuery.getQuery(Event.class).include("suggestions").include("comments");
+    public static ParseQuery<BaseEvent> getQuery() {
+        return ParseQuery.getQuery(BaseEvent.class).include("suggestions").include("comments");
     }
 
     public String getGreeting() {
