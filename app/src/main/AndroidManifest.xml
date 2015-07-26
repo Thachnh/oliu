@@ -48,6 +48,10 @@
             android:name=".CreateEventActivity"
             android:label="@string/title_activity_create_event" >
         </activity>
+
+        <provider android:authorities="com.facebook.app.FacebookContentProvider1618081348469294"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
     </application>
 
 </manifest>

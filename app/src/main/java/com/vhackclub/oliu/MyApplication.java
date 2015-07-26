@@ -37,5 +37,9 @@ public class MyApplication  extends Application {
         ParseACL.setDefaultACL(defaultACL, true);
 
         ParseFacebookUtils.initialize(this);
+
+        ParseObject.registerSubclass(Event.class);
+        ParseObject.registerSubclass(Comment.class);
+        ParseObject.registerSubclass(Suggestion.class);
     }
 }
