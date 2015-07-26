@@ -3,6 +3,7 @@ package com.vhackclub.oliu.base;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 @ParseClassName("Comment")
 public class Comment extends ParseObject {
@@ -15,12 +16,12 @@ public class Comment extends ParseObject {
         put("text", text);
     }
 
-    public String getUuidString() {
-        return getString("uuid");
+    public ParseUser getUser() {
+        return getParseUser("user");
     }
 
-    public void setUuidString(String uuid) {
-        put("uuid", uuid);
+    public void setUser(ParseUser user) {
+        put("user", user);
     }
 
     public static ParseQuery<Comment> getQuery() {
