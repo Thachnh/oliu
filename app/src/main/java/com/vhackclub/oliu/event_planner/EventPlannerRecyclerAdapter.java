@@ -15,6 +15,7 @@ import com.vhackclub.oliu.base.Comment;
 import com.vhackclub.oliu.models.LocationSuggestion;
 import com.vhackclub.oliu.models.Restaurant;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -103,7 +104,7 @@ public class EventPlannerRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public void addComment(Comment comment) {
         mComments.add(comment);
-        notifyItemInserted(mComments.size() - 1);
+        notifyDataSetChanged();
     }
 
     public void updateLocationSuggestions(List<LocationSuggestion> suggestions) {
@@ -113,6 +114,9 @@ public class EventPlannerRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     public void updateEvent(BaseEvent event) {
         mEvent = event;
         mComments = event.getComments();
+        if (mComments == null) {
+            mComments = new ArrayList<>();
+        }
         updateLocationSuggestions(event.getLocationSuggestions());
         notifyDataSetChanged();
     }

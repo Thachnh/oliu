@@ -68,6 +68,10 @@ public class BaseEvent extends ParseObject {
         return getList("comments");
     }
 
+    public void addComment(Comment comment) {
+        add("comments", comment);
+    }
+
     public static ParseQuery<BaseEvent> getQuery() {
         return ParseQuery.getQuery(BaseEvent.class).include("suggestions").include("comments");
     }
