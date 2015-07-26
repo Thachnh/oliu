@@ -6,7 +6,11 @@ import com.facebook.FacebookSdk;
 import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.vhackclub.oliu.base.Comment;
+import com.vhackclub.oliu.base.Event;
+import com.vhackclub.oliu.base.Suggestion;
 
 /**
  * Created by thachnh on 7/25/15.
@@ -18,6 +22,10 @@ public class MyApplication  extends Application {
         super.onCreate();
 
         FacebookSdk.sdkInitialize(getApplicationContext());
+
+        ParseObject.registerSubclass(Comment.class);
+        ParseObject.registerSubclass(Suggestion.class);
+        ParseObject.registerSubclass(Event.class);
 
         Parse.enableLocalDatastore(this);
         Parse.initialize(this,

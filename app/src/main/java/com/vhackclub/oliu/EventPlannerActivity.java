@@ -28,9 +28,6 @@ public class EventPlannerActivity extends FragmentActivity {
         e.setType(Event.TYPE.EAT);
         EventPlannerRecyclerAdapter adapter = new EventPlannerRecyclerAdapter(e, this, getLayoutInflater());
 
-        ParseObject.registerSubclass(Comment.class);
-        ParseObject.registerSubclass(Suggestion.class);
-
         Comment m1 = new Comment();
         m1.setText("Fuck 1");
         Comment m2 = new Comment();
