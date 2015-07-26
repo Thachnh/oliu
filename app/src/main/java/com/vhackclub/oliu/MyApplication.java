@@ -9,8 +9,11 @@ import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.vhackclub.oliu.base.BaseEvent;
-import com.vhackclub.oliu.base.Suggestion;
-import com.vhackclub.oliu.models.Option;
+import com.vhackclub.oliu.base.BaseLocation;
+import com.vhackclub.oliu.base.BaseSuggestion;
+import com.vhackclub.oliu.base.Comment;
+import com.vhackclub.oliu.models.LocationSuggestion;
+import com.vhackclub.oliu.models.Restaurant;
 
 /**
  * Created by thachnh on 7/25/15.
@@ -23,9 +26,12 @@ public class MyApplication  extends Application {
 
         FacebookSdk.sdkInitialize(getApplicationContext());
 
-        ParseObject.registerSubclass(Option.Comment.class);
-        ParseObject.registerSubclass(Suggestion.class);
+        ParseObject.registerSubclass(Comment.class);
         ParseObject.registerSubclass(BaseEvent.class);
+        ParseObject.registerSubclass(BaseLocation.class);
+        ParseObject.registerSubclass(BaseSuggestion.class);
+        ParseObject.registerSubclass(LocationSuggestion.class);
+        ParseObject.registerSubclass(Restaurant.class);
 
         Parse.enableLocalDatastore(this);
         Parse.initialize(this,
@@ -37,9 +43,5 @@ public class MyApplication  extends Application {
         ParseACL.setDefaultACL(defaultACL, true);
 
         ParseFacebookUtils.initialize(this);
-
-        ParseObject.registerSubclass(BaseEvent.class);
-        ParseObject.registerSubclass(Option.Comment.class);
-        ParseObject.registerSubclass(Suggestion.class);
     }
 }
