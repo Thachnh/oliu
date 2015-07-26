@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.vhackclub.oliu.R;
 import com.vhackclub.oliu.SearchSuggestionActivity;
 import com.vhackclub.oliu.base.Suggestion;
+import com.vhackclub.oliu.models.Restaurant;
 
 import java.util.List;
 
@@ -20,17 +21,20 @@ import java.util.List;
  */
 public class PlacePickerViewPagerAdapter extends PagerAdapter {
 
-    private List<Suggestion> mSuggestion;
+    private List<Restaurant> mSuggestion;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
 
     public PlacePickerViewPagerAdapter(
             Context context,
-            LayoutInflater layoutInflater,
-            List<Suggestion> suggestion) {
-        mSuggestion = suggestion;
+            LayoutInflater layoutInflater) {
         mContext = context;
         mLayoutInflater = layoutInflater;
+    }
+
+    public void updateSuggestions(List<Restaurant> suggestion) {
+        mSuggestion = suggestion;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -46,10 +50,9 @@ public class PlacePickerViewPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         if (position < mSuggestion.size()) {
-            View view = mLayoutInflater.inflate(R.layout.place_card, container, false);
-            TextView title = (TextView) view.findViewById(R.id.title);
-            title.setText(mSuggestion.get(position).getName());
+            RestaurantCard view = (RestaurantCard) mLayoutInflater.inflate(R.layout.restaurant_page, container, false);
             container.addView(view);
+            view.setRestaurant((Restaurant) mSuggestion.get(position));
             return view;
         }
         View view = mLayoutInflater.inflate(R.layout.add_option_page, container, false);
@@ -65,6 +68,6 @@ public class PlacePickerViewPagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((LinearLayout) object);
+        container.removeView((View) object);
     }
 }

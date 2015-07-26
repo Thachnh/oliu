@@ -13,6 +13,7 @@ import com.vhackclub.oliu.R;
 import com.vhackclub.oliu.base.Comment;
 import com.vhackclub.oliu.base.Event;
 import com.vhackclub.oliu.base.Suggestion;
+import com.vhackclub.oliu.models.Restaurant;
 
 import java.util.List;
 
@@ -31,13 +32,14 @@ public class EventPlannerRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     private final Context mContext;
     private final LayoutInflater mLayoutInflater;
     private List<Comment> mComments;
-    private List<Suggestion> mSuggestions;
     private Event mEvent;
+    private PlacePickerViewPagerAdapter mAdapter;
 
     public EventPlannerRecyclerAdapter(Event event, Context context, LayoutInflater layoutInflater) {
         this.mEvent = event;
         this.mContext = context;
         this.mLayoutInflater = layoutInflater;
+        mAdapter = new PlacePickerViewPagerAdapter(mContext, mLayoutInflater);
     }
 
     @Override
@@ -47,7 +49,7 @@ public class EventPlannerRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                 return new CommentViewHolder(new TextView(mContext));
             case PLACE_PICKER:
                 View view = mLayoutInflater.inflate(R.layout.place_pager, parent, false);
-                return new ViewPagerHolder(view, mSuggestions);
+                return new ViewPagerHolder(view, mAdapter);
             case COMMENT:
                 return new CommentViewHolder(new TextView(mContext));
             default:
@@ -101,20 +103,18 @@ public class EventPlannerRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         notifyItemInserted(mComments.size() - 1);
     }
 
-    public void updateSuggestions(List<Suggestion> suggestions) {
-        mSuggestions = suggestions;
+    public void updateRestaurant(List<Restaurant> suggestions) {
+        mAdapter.updateSuggestions(suggestions);
     }
 
     private class ViewPagerHolder extends RecyclerView.ViewHolder {
 
         private ViewPager mViewPager;
-        private PagerAdapter mAdapter;
 
-        public ViewPagerHolder(View itemView, List<Suggestion> suggestions) {
+        public ViewPagerHolder(View itemView, PagerAdapter adapter) {
             super(itemView);
             mViewPager = (ViewPager) itemView;
-            mAdapter = new PlacePickerViewPagerAdapter(mContext, mLayoutInflater, suggestions);
-            mViewPager.setAdapter(mAdapter);
+            mViewPager.setAdapter(adapter);
         }
     }
 

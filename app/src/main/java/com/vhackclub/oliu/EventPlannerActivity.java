@@ -10,6 +10,7 @@ import com.vhackclub.oliu.base.Comment;
 import com.vhackclub.oliu.base.Event;
 import com.vhackclub.oliu.base.Suggestion;
 import com.vhackclub.oliu.event_planner.EventPlannerRecyclerAdapter;
+import com.vhackclub.oliu.models.Restaurant;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,17 +40,7 @@ public class EventPlannerActivity extends FragmentActivity {
         Comment m5 = new Comment();
         m5.setText("Fuck 5");
         adapter.updateComments(Arrays.asList(m1, m2, m3, m4, m5));
-        Suggestion s1 = new Suggestion();
-        s1.setName("Sex 1");
-        Suggestion s2 = new Suggestion();
-        s2.setName("Sex 2");
-        Suggestion s3 = new Suggestion();
-        s3.setName("Sex 3");
-        Suggestion s4 = new Suggestion();
-        s4.setName("Sex 4");
-        Suggestion s5 = new Suggestion();
-        s5.setName("Sex 5");
-        adapter.updateSuggestions(Arrays.asList(s1,s2,s3,s4,s5));
+        adapter.updateRestaurant(Arrays.asList(Restaurant.createInstance(), Restaurant.createInstance()));
         view.setLayoutManager(new LinearLayoutManager(this));
         view.setAdapter(adapter);
     }

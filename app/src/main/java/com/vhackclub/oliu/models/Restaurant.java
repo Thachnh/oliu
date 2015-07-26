@@ -19,6 +19,18 @@ public class Restaurant {
 
     public void setVenueUrl(String venueUrl) { this.venueUrl = venueUrl; }
 
+    public static Restaurant createInstance() {
+        Restaurant a = new Restaurant();
+        a.setName("Ten nha hang");
+        a.setAddress("111 duong Road, thanh pho City");
+        a.setCategory("An cac");
+        a.setPhone("111111111");
+        a.setRating("3.0");
+        a.setTier("$$$");
+        a.setStatus("CAC ASD CAC ASD CAC ASD CAC ASD CAC ASD ");
+        return a;
+    }
+
     public String getId() {
         return id;
     }

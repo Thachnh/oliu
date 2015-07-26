@@ -1,10 +1,12 @@
-package com.vhackclub.oliu.view;
+package com.vhackclub.oliu.event_planner;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.vhackclub.oliu.R;
 
 /**
  * Created by geruk on 7/25/15.
@@ -13,10 +15,12 @@ public class ListFriendlyViewPager extends ViewPager {
 
     public ListFriendlyViewPager(Context context) {
         super(context);
+        setPageMargin(context.getResources().getDimensionPixelSize(R.dimen.pager_margin));
     }
 
     public ListFriendlyViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setPageMargin(context.getResources().getDimensionPixelSize(R.dimen.pager_margin));
     }
 
     @Override
@@ -36,7 +40,9 @@ public class ListFriendlyViewPager extends ViewPager {
         int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(childWidthSize, MeasureSpec.AT_MOST);
         int childHeightMeasureSpec = MeasureSpec.UNSPECIFIED;
         firstChild.measure(childWidthMeasureSpec, childHeightMeasureSpec);
-        int newMeasureSpect = MeasureSpec.makeMeasureSpec(firstChild.getMeasuredHeight(), MeasureSpec.EXACTLY);
+        int newMeasureSpect = MeasureSpec.makeMeasureSpec(
+                firstChild.getMeasuredHeight() + getPaddingTop() + getPaddingBottom(),
+                MeasureSpec.EXACTLY);
         super.onMeasure(widthMeasureSpec, newMeasureSpect);
 
     }
