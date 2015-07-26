@@ -36,6 +36,7 @@ public class EventPlannerRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     private List<Comment> mComments;
     private BaseEvent mEvent;
     private PlacePickerViewPagerAdapter mAdapter;
+    private ViewPager mPager;
 
     public EventPlannerRecyclerAdapter(BaseEvent event, Context context, LayoutInflater layoutInflater) {
         this.mEvent = event;
@@ -109,10 +110,16 @@ public class EventPlannerRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public void updateLocationSuggestions(List<LocationSuggestion> suggestions) {
         mAdapter.updateSuggestions(suggestions);
+        if (mPager != null) {
+            mPager.setCurrentItem(0, true);
+        }
     }
 
     public void addLocationSuggestion(LocationSuggestion suggestion) {
         mAdapter.addSuggestion(suggestion);
+        if (mPager != null) {
+            mPager.setCurrentItem(0, true);
+        }
     }
 
     public void updateEvent(BaseEvent event) {
@@ -141,6 +148,7 @@ public class EventPlannerRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
             super(itemView);
             mViewPager = (ViewPager) itemView;
             mViewPager.setAdapter(adapter);
+            mPager = mViewPager;
         }
     }
 

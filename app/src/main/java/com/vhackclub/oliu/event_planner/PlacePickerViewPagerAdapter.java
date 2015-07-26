@@ -115,4 +115,9 @@ public class PlacePickerViewPagerAdapter extends PagerAdapter {
             this.objectId = objectId;
         }
     }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
 }
