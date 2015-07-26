@@ -98,7 +98,12 @@ public class PlacePickerViewPagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((View) object);
+        for (int i = 0; i < container.getChildCount(); i++) {
+            if (isViewFromObject(container.getChildAt(i), object)) {
+                container.removeViewAt(i);
+                return;
+            }
+        }
     }
 
     public static class ViewKey {
