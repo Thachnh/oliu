@@ -1,5 +1,6 @@
 package com.vhackclub.oliu;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import com.vhackclub.oliu.base.BaseEvent;
 import com.vhackclub.oliu.base.Comment;
 import com.vhackclub.oliu.event_planner.EventPlannerRecyclerAdapter;
 import com.vhackclub.oliu.models.Restaurant;
+import com.vhackclub.oliu.util.Util;
 
 import java.util.Arrays;
 
@@ -77,4 +79,12 @@ public class EventPlannerActivity extends FragmentActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Util.PICK_LOCATION) {
+            if (resultCode == RESULT_OK) {
+                String locationId = data.getStringExtra("restaurandId");
+            }
+        }
+    }
 }

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.vhackclub.oliu.EventPlannerActivity;
 import com.vhackclub.oliu.R;
 import com.vhackclub.oliu.SuggestionDetailDialog;
 import com.vhackclub.oliu.models.Restaurant;

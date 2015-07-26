@@ -1,5 +1,6 @@
 package com.vhackclub.oliu;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,7 +34,7 @@ import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedInput;
 
 
-public class SearchSuggestionActivity extends ActionBarActivity {
+public class SearchSuggestionActivity extends ActionBarActivity implements SuggestionDetailDialog.OnChoosingSuggestionListener{
     EditText etSearch;
     Button btnSearch;
     RecyclerView rvSuggestion;
@@ -140,10 +141,18 @@ public class SearchSuggestionActivity extends ActionBarActivity {
                     address = JSONUtil.getString("address", location);
                 }
                 final Restaurant lRestaurant = new Restaurant();
-                lRestaurant.setId(id);
-                lRestaurant.setName(name);
-                lRestaurant.setPhone(phone);
-                lRestaurant.setAddress(address);
+                if (id != null) {
+                    lRestaurant.setId(id);
+                }
+                if (name != null) {
+                    lRestaurant.setName(name);
+                }
+                if (phone != null) {
+                    lRestaurant.setPhone(phone);
+                }
+                if (address != null) {
+                    lRestaurant.setAddress(address);
+                }
                 api.get4SquareSpecificVenueData(id,
                         FoursquareAPIData.CLIENT_ID,
                         FoursquareAPIData.CLIENT_SECRET,
@@ -211,16 +220,34 @@ public class SearchSuggestionActivity extends ActionBarActivity {
                     }
                 }
             }
-
-            lRestaurant.setCanonicalUrl(canonicalUrl);
-            lRestaurant.setTier(tier);
-            lRestaurant.setRating(rating);
-            lRestaurant.setStatus(status);
-            lRestaurant.setVenueUrl(photoUrl);
+            if (canonicalUrl != null) {
+                lRestaurant.setCanonicalUrl(canonicalUrl);
+            }
+            if (tier != null) {
+                lRestaurant.setTier(tier);
+            }
+            if (rating != null) {
+                lRestaurant.setRating(rating);
+            }
+            if (status != null) {
+                lRestaurant.setStatus(status);
+            }
+            if (photoUrl != null) {
+                lRestaurant.setVenueUrl(photoUrl);
+            }
             adapter.addItem(lRestaurant);
             adapter.notifyDataSetChanged();
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onChoosingSuggestion(String suggestionId) {
+        Intent i = new Intent();
+        i.putExtra("restaurandId", suggestionId);
+        setResult(RESULT_OK, i);
+        Log.d(TAG, suggestionId);
+        finish();
     }
 }

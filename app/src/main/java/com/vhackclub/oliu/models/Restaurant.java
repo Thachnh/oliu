@@ -1,26 +1,15 @@
 package com.vhackclub.oliu.models;
 
+import com.parse.ParseClassName;
+import com.parse.ParseQuery;
 import com.vhackclub.oliu.base.BaseLocation;
 import java.io.Serializable;
 
 /**
  * Created by duncapham on 7/25/15.
  */
+@ParseClassName("Restaurant")
 public class Restaurant extends BaseLocation implements Serializable{
-    private String id;
-    private String name;
-    private String phone;
-    private String address;
-    private String category;
-    private String canonicalUrl;
-    private String tier;
-    private String rating;
-    private String status;
-    private String venueUrl;
-
-    public String getVenueUrl() { return venueUrl; }
-
-    public void setVenueUrl(String venueUrl) { this.venueUrl = venueUrl; }
 
     public static Restaurant createInstance() {
         Restaurant a = new Restaurant();
@@ -34,75 +23,68 @@ public class Restaurant extends BaseLocation implements Serializable{
         return a;
     }
 
-    public String getId() {
-        return id;
-    }
+    public String getVenueUrl() { return (String) get("venueUrl"); }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    public void setVenueUrl(String venueUrl) { put("venueUrl", venueUrl); }
 
-    public String getName() {
-        return name;
-    }
+    public String getId() { return (String) get("id"); }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setId(String id) { put("id", id); }
 
-    public String getPhone() {
-        return phone;
-    }
+    public String getName() { return (String) get("name") ;}
+
+    public void setName(String name) { put("name", name); }
+
+    public String getPhone() { return (String) get("phone"); }
 
     public void setPhone(String phone) {
-        this.phone = phone;
+        put("phone", phone);
     }
 
     public String getAddress() {
-        return address;
+        return (String) get("address");
     }
 
     public void setAddress(String address) {
-        this.address = address;
+        put("address", address);
     }
 
     public String getCategory() {
-        return category;
+        return (String) get("category");
     }
 
     public void setCategory(String category) {
-        this.category = category;
+        put("category", category);
     }
 
     public String getCanonicalUrl() {
-        return canonicalUrl;
+        return (String) get("canonicalUrl");
     }
 
     public void setCanonicalUrl(String canonicalUrl) {
-        this.canonicalUrl = canonicalUrl;
+        put("canonicalUrl", canonicalUrl);
     }
 
     public String getTier() {
-        return tier;
+        return (String) get("tier");
     }
 
     public void setTier(String tier) {
-        this.tier = tier;
+        put("tier", tier);
     }
 
     public String getRating() {
-        return rating;
+        return (String) get("rating");
     }
 
     public void setRating(String rating) {
-        this.rating = rating;
+        put("rating", rating);
     }
 
     public String getStatus() {
-        return status;
+        return (String) get("status");
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    public void setStatus(String status) { put("status", status); }
+
 }

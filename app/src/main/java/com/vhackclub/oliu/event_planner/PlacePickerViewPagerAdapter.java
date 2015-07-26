@@ -1,8 +1,10 @@
 package com.vhackclub.oliu.event_planner;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import com.vhackclub.oliu.R;
 import com.vhackclub.oliu.SearchSuggestionActivity;
 import com.vhackclub.oliu.models.LocationSuggestion;
 import com.vhackclub.oliu.models.Restaurant;
+import com.vhackclub.oliu.util.Util;
 
 import java.util.List;
 
@@ -59,7 +62,7 @@ public class PlacePickerViewPagerAdapter extends PagerAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mContext.startActivity(new Intent(mContext, SearchSuggestionActivity.class));
+                ((Activity) mContext).startActivityForResult(new Intent(mContext, SearchSuggestionActivity.class), Util.PICK_LOCATION);
             }
         });
         return view;
