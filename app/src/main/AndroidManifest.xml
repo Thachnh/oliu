@@ -42,10 +42,6 @@
             android:name=".CreateEventActivity"
             android:label="@string/title_activity_create_event" >
         </activity>
-        <activity
-            android:name=".SelectFriendsActivity"
-            android:label="@string/title_activity_select_friends" >
-        </activity>
     </application>
 
 </manifest>
