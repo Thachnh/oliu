@@ -3,9 +3,12 @@ package com.vhackclub.oliu.providers;
 import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.parse.ParsePushBroadcastReceiver;
+import com.parse.ParseUser;
+import com.vhackclub.oliu.EventPlannerActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,12 +23,30 @@ public class MyPushBroadcastReceiver extends ParsePushBroadcastReceiver {
 
     @Override
     protected Notification getNotification(Context context, Intent intent) {
+        JSONObject data = getDataFromIntent(intent);
+        String userId = data.optString("user_id", "");
+        if (userId.equals(ParseUser.getCurrentUser().getObjectId())) {
+            return null;
+        }
         return super.getNotification(context, intent);
     }
 
     @Override
     protected void onPushOpen(Context context, Intent intent) {
-        // Implement
+        JSONObject data = getDataFromIntent(intent);
+        String channel = intent.getExtras().getString(PARSE_CHANNEL_KEY);
+
+        if (channel != null) {
+            if (channel.startsWith("event-")) {
+                String eventId = channel.split("-")[1];
+                Intent i = new Intent(context, EventPlannerActivity.class);
+                Bundle b = new Bundle();
+                b.putString("event_id", eventId);
+                i.putExtras(b);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+            }
+        }
     }
 
     @Override

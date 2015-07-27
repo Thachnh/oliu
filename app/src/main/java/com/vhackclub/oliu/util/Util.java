@@ -1,6 +1,7 @@
 package com.vhackclub.oliu.util;
 
 import com.parse.ParsePush;
+import com.parse.ParseUser;
 import com.vhackclub.oliu.MyApplication;
 
 import org.json.JSONException;
@@ -20,6 +21,7 @@ public class Util {
             obj.put("action", action);
             obj.put("object_id", objectId);
             obj.put("alert", alert);
+            obj.put("user_id", ParseUser.getCurrentUser().getObjectId());
             push.setData(obj);
             push.sendInBackground();
         } catch (JSONException e) {
