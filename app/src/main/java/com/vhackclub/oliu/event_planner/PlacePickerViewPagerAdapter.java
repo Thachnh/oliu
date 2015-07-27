@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.parse.ParseException;
@@ -90,7 +92,11 @@ public class PlacePickerViewPagerAdapter extends PagerAdapter {
             VoteRow voteView = (VoteRow) mLayoutInflater.inflate(R.layout.vote_row, view, false);
             voteView.reset();
             voteView.bindSuggestion(mSuggestions.get(position));
-            view.addView(voteView);
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.gravity = Gravity.BOTTOM;
+            view.addView(voteView, params);
             return new ViewKey(suggestion.getLocation().getObjectId());
         }
         Log.d("instantiate item", "add add button " + position);

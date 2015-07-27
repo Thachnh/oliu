@@ -47,17 +47,15 @@ public class VoteRow extends LinearLayout {
     }
 
     public void reset() {
-        mLike.setVisibility(GONE);
+        mLike.setChecked(false);
         mLikeCount.setText(Integer.toString(0));
     }
 
     public void bindSuggestion(BaseSuggestion suggestion) {
         mSuggestion = suggestion;
-        if (!hasCurrentUserLike()) {
-            mLike.setVisibility(VISIBLE);
-        }
         int likeCount = mSuggestion.getVoters() == null ? 0 : mSuggestion.getVoters().size();
         mLikeCount.setText(Integer.toString(likeCount));
+        mLike.setChecked(hasCurrentUserLike());
         mLike.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

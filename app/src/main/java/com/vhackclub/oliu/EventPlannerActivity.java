@@ -44,7 +44,6 @@ public class EventPlannerActivity extends FragmentActivity {
         pullEvent(id);
 
         RecyclerView view = (RecyclerView) findViewById(R.id.recycler_view);
-        ParseObject.registerSubclass(BaseEvent.class);
         mAdapter = new EventPlannerRecyclerAdapter(null, this, getLayoutInflater());
 
         view.setLayoutManager(new LinearLayoutManager(this));

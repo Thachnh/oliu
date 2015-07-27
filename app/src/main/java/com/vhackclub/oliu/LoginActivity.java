@@ -3,6 +3,7 @@ package com.vhackclub.oliu;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -27,34 +28,37 @@ public class LoginActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        if (getIntent().getAction().equals(Intent.ACTION_VIEW)) {
+            // from http
+            final Uri uri = getIntent().getData();
+            List<String> permissions = Arrays.asList("public_profile", "email", "user_friends");
+            ParseFacebookUtils.logInWithReadPermissionsInBackground(this, permissions, new LogInCallback() {
+                @Override
+                public void done(ParseUser parseUser, ParseException e) {
+                    if (parseUser != null) {
+                        Intent intent = new Intent(LoginActivity.this, EventPlannerActivity.class);
+                        Bundle b = new Bundle();
+                        b.putString("event_id", uri.getLastPathSegment());
+                        intent.putExtras(b);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+            });
+        }
+
         if (ParseUser.getCurrentUser().getEmail() != null) {
             startActivity(new Intent(LoginActivity.this, CreateEventActivity.class));
             finish();
             return;
         }
 
-        Button login = (Button) findViewById(R.id.loginfb);
+        final Button login = (Button) findViewById(R.id.loginfb);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            progressDialog = ProgressDialog.show(LoginActivity.this, "", "Logging in...", true);
-
-            List<String> permissions = Arrays.asList("public_profile", "email", "user_friends");
-
-            ParseFacebookUtils.logInWithReadPermissionsInBackground(LoginActivity.this, permissions, new LogInCallback() {
-                @Override
-                public void done(ParseUser user, ParseException err) {
-                    progressDialog.dismiss();
-                    if (user == null) {
-                        Log.d("LoginActivity", "Uh oh. The user cancelled the Facebook login. " + Log.getStackTraceString(err));
-                    } else {
-                        Log.d("LoginActivity", "User logged in through Facebook!");
-                        startActivity(new Intent(LoginActivity.this, CreateEventActivity.class));
-                        finish();
-                    }
-                }
-            });
+                login();
             }
         });
     }
@@ -65,4 +69,23 @@ public class LoginActivity extends ActionBarActivity {
         ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
     }
 
+    private void login() {
+        progressDialog = ProgressDialog.show(LoginActivity.this, "", "Logging in...", true);
+
+        List<String> permissions = Arrays.asList("public_profile", "email", "user_friends");
+
+        ParseFacebookUtils.logInWithReadPermissionsInBackground(LoginActivity.this, permissions, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException err) {
+                progressDialog.dismiss();
+                if (user == null) {
+                    Log.d("LoginActivity", "Uh oh. The user cancelled the Facebook login. " + Log.getStackTraceString(err));
+                } else {
+                    Log.d("LoginActivity", "User logged in through Facebook!");
+                    startActivity(new Intent(LoginActivity.this, CreateEventActivity.class));
+                    finish();
+                }
+            }
+        });
+    }
 }
