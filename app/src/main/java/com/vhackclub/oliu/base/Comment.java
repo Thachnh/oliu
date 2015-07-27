@@ -27,4 +27,8 @@ public class Comment extends ParseObject {
     public static ParseQuery<Comment> getQuery() {
         return ParseQuery.getQuery(Comment.class);
     }
+
+    public String getPushDesc() {
+        return getUser().getObjectId() + " comments: " + getText();
+    }
 }

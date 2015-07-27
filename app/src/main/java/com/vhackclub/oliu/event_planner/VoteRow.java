@@ -68,6 +68,7 @@ public class VoteRow extends LinearLayout {
                             mLike.setEnabled(true);
                             int likeCount = mSuggestion.getVoters() == null ? 0 : mSuggestion.getVoters().size();
                             mLikeCount.setText(Integer.toString(likeCount));
+
                         }
                     });
                 } else {

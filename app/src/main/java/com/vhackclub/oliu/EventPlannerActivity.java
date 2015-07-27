@@ -12,7 +12,7 @@ import android.widget.EditText;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -23,8 +23,6 @@ import com.vhackclub.oliu.event_planner.EventPlannerRecyclerAdapter;
 import com.vhackclub.oliu.models.LocationSuggestion;
 import com.vhackclub.oliu.models.Restaurant;
 import com.vhackclub.oliu.util.Util;
-
-import java.util.Arrays;
 
 public class EventPlannerActivity extends FragmentActivity {
 
@@ -41,6 +39,7 @@ public class EventPlannerActivity extends FragmentActivity {
 
         Bundle b = getIntent().getExtras();
         String id = b.getString("event_id");
+        subscribePush(id);
         pullEvent(id);
 
         RecyclerView view = (RecyclerView) findViewById(R.id.recycler_view);
@@ -48,6 +47,10 @@ public class EventPlannerActivity extends FragmentActivity {
 
         view.setLayoutManager(new LinearLayoutManager(this));
         view.setAdapter(mAdapter);
+    }
+
+    private void subscribePush(final String eventId) {
+        ParsePush.subscribeInBackground("event-" + eventId);
     }
 
     public void initView() {
@@ -64,6 +67,7 @@ public class EventPlannerActivity extends FragmentActivity {
                     public void done(ParseException e) {
                         mEvent.addComment(comment);
                         mEvent.saveInBackground();
+                        Util.push("event-" + mEvent.getObjectId(), "comment", comment.getObjectId(), comment.getPushDesc());
                     }
                 });
                 mAdapter.addComment(comment);
@@ -87,6 +91,8 @@ public class EventPlannerActivity extends FragmentActivity {
                     } catch (ParseException e1) {
                         e1.printStackTrace();
                     }
+                } else {
+                    Log.d("TEST", "" + Log.getStackTraceString(e));
                 }
             }
         });
@@ -125,6 +131,7 @@ public class EventPlannerActivity extends FragmentActivity {
             @Override
             public void done(ParseException e) {
                 Log.d("add location", "new suggestion id " + suggestion.getObjectId());
+                Util.push("event-" + mEvent.getObjectId(), "suggest_location", suggestion.getObjectId(), "Someone suggests some shit");
                 mEvent.addLocationSuggestion(suggestion);
                 mEvent.saveInBackground();
                 mAdapter.addLocationSuggestion(suggestion);
