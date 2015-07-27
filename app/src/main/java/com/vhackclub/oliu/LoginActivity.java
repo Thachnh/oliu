@@ -22,6 +22,7 @@ import java.util.List;
 public class LoginActivity extends ActionBarActivity {
 
     public Dialog progressDialog;
+    private String currentEventId = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,25 +32,11 @@ public class LoginActivity extends ActionBarActivity {
         if (getIntent().getAction().equals(Intent.ACTION_VIEW)) {
             // from http
             final Uri uri = getIntent().getData();
-            List<String> permissions = Arrays.asList("public_profile", "email", "user_friends");
-            ParseFacebookUtils.logInWithReadPermissionsInBackground(this, permissions, new LogInCallback() {
-                @Override
-                public void done(ParseUser parseUser, ParseException e) {
-                    if (parseUser != null) {
-                        Intent intent = new Intent(LoginActivity.this, EventPlannerActivity.class);
-                        Bundle b = new Bundle();
-                        b.putString("event_id", uri.getLastPathSegment());
-                        intent.putExtras(b);
-                        startActivity(intent);
-                        finish();
-                    }
-                }
-            });
+            currentEventId = uri.getLastPathSegment();
         }
 
-        if (ParseUser.getCurrentUser().getEmail() != null) {
-            startActivity(new Intent(LoginActivity.this, CreateEventActivity.class));
-            finish();
+        if (ParseUser.getCurrentUser().getUsername() != null) {
+            onSignedIn();
             return;
         }
 
@@ -82,10 +69,23 @@ public class LoginActivity extends ActionBarActivity {
                     Log.d("LoginActivity", "Uh oh. The user cancelled the Facebook login. " + Log.getStackTraceString(err));
                 } else {
                     Log.d("LoginActivity", "User logged in through Facebook!");
-                    startActivity(new Intent(LoginActivity.this, CreateEventActivity.class));
-                    finish();
+                    onSignedIn();
                 }
             }
         });
+    }
+
+    private void onSignedIn() {
+        if (currentEventId != null) {
+            Intent intent = new Intent(LoginActivity.this, EventPlannerActivity.class);
+            Bundle b = new Bundle();
+            b.putString("event_id", currentEventId);
+            intent.putExtras(b);
+            startActivity(intent);
+            finish();
+        } else {
+            startActivity(new Intent(LoginActivity.this, CreateEventActivity.class));
+            finish();
+        }
     }
 }
