@@ -134,7 +134,6 @@ public class CreateEventActivity extends ActionBarActivity {
         // TODO : validate the time
 
         event.setHost(ParseUser.getCurrentUser());
-        event.addMember(ParseUser.getCurrentUser());
         event.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

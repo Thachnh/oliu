@@ -24,6 +24,8 @@ import com.vhackclub.oliu.models.LocationSuggestion;
 import com.vhackclub.oliu.models.Restaurant;
 import com.vhackclub.oliu.util.Util;
 
+import java.util.List;
+
 public class EventPlannerActivity extends FragmentActivity {
 
     private EventPlannerRecyclerAdapter mAdapter;
@@ -87,6 +89,7 @@ public class EventPlannerActivity extends FragmentActivity {
                     try {
                         baseEvent.fetchIfNeeded();
                         mEvent = baseEvent;
+                        tryAddMember();
                         mAdapter.updateEvent(baseEvent);
                     } catch (ParseException e1) {
                         e1.printStackTrace();
@@ -106,6 +109,15 @@ public class EventPlannerActivity extends FragmentActivity {
                 Log.d("activity Result", "id " + locationId);
                 handleNewLocation(locationId);
             }
+        }
+    }
+
+    private void tryAddMember() {
+        List<ParseUser> mems = mEvent.getMembers();
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (mems == null || !mems.contains(currentUser)) {
+            mEvent.addMember(currentUser);
+            Util.push("event-" + mEvent.getObjectId(), "add_member", currentUser.getObjectId(), currentUser.getObjectId() + " just joined");
         }
     }
 
