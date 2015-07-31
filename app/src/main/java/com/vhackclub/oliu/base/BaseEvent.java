@@ -36,7 +36,7 @@ public class BaseEvent extends ParseObject {
 
     public void setMembers(List<ParseUser> members) { put("members", members); }
 
-    public void addMember(ParseUser user) { add("members", user); }
+    public void addMember(ParseUser user) { addUnique("members", user); }
 
     public List<ParseUser> getMembers() {return getList("members"); }
 
@@ -79,4 +79,5 @@ public class BaseEvent extends ParseObject {
     public String getGreeting() {
         return "Lets " + getType().toString() + " at " + getWhen().toString();
     }
+
 }
